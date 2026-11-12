@@ -13,6 +13,7 @@ db.py — thin Azure Databricks SQL layer (Unity Catalog).
 """
 from __future__ import annotations
 
+import atexit
 import logging
 import random
 import re
@@ -95,7 +96,7 @@ def _connect():
         server_hostname=C.DATABRICKS_SERVER_HOSTNAME,
         http_path=C.DATABRICKS_HTTP_PATH,
         credentials_provider=_credentials_provider,
-        _user_agent_entry="pim-pam-engagement-dash",
+        user_agent_entry="pim-pam-engagement-dash",
     )
 
 
@@ -106,6 +107,18 @@ def _release() -> None:
     if conn is not None:
         with _idle_lock:
             _idle.append(conn)
+
+
+@atexit.register
+def _close_idle() -> None:
+    """Close the pooled sessions on shutdown (otherwise the connector logs errors as Python exits)."""
+    with _idle_lock:
+        conns, _idle[:] = list(_idle), []
+    for conn in conns:
+        try:
+            conn.close()
+        except Exception:  # noqa: BLE001
+            pass
 
 
 def _drop_connection() -> None:

@@ -21,9 +21,9 @@ OG_IMAGE_FILE = "og-image.png"
 HEADER_BRAND_TITLE = "Global PIIAG"
 HEADER_BRAND_SUBTITLE = "PIM-PAM Engagement"
 LOGO_FILE = "pim-pam-logo.png"
-LOGO_ALT = "pim-pam.net"
+LOGO_ALT = "wkpgf-pimpam-digital-tools"
 LOGO_WIDTH, LOGO_HEIGHT = 219, 94
-
+# https:///
 # Per-page browser tab titles (suffix matches the original site).
 _SUFFIX = f" · {SITE_TITLE}"
 PAGE_TITLES = {
@@ -54,10 +54,10 @@ NAV_LINKS = (
 )
 NAV_CTA_LABEL = "Staff sign-in"
 
-FOOTER_LEFT = "Maintained in the PIM-PAM engagement database · part of pim-pam.net."
+FOOTER_LEFT = "Maintained in the PIM-PAM engagement database · part of wkpgf-pimpam-digital-tools."
 FOOTER_RIGHT = "© World Bank Group · Global PIIAG / PIM-PAM"
 
-PIM_PAM_NET_URL = "https://pim-pam.net"
+PIM_PAM_NET_URL = "https://datanalytics.worldbank.org/wkpgf-pimpam-digital-tools/"
 PIM_PAM_AI_URL = "https://pim-pam.ai"
 
 # Shared labels
@@ -91,10 +91,10 @@ HOME_CARDS = (
         "cta": "Open map",
     },
     {
-        "title": "InfraGov 2.0 Diagnosis, pim-pam.net Digital Demonstrations",
+        "title": "InfraGov 2.0 Diagnosis, wkpgf-pimpam-digital-tools Digital Demonstrations",
         "body": (
             "Per-country InfraGov 2.0 and PEFA / PIMA / CCIA diagnostics — focal points and "
-            "pipeline — alongside pim-pam.net digital tool demonstrations."
+            "pipeline — alongside wkpgf-pimpam-digital-tools demonstrations."
         ),
         "page": C.PAGE_LOGIN,
         "cta": "Staff sign-in",
@@ -309,7 +309,7 @@ ABOUT_DEMO_BODY = (
     "This engagement site shows how the ",
     ("b", "InfraGov 2.0"),
     " modular assessment framework and the ",
-    ("b", "pim-pam.net"),
+    ("b", "wkpgf-pimpam-digital-tools"),
     " digital tools and learning resources are being leveraged to achieve greater impact — "
     "addressing eight key PIM-PAM issues found across many client countries.",
 )
@@ -385,7 +385,7 @@ ABOUT_KNOWLEDGE_P2 = (
     "identifying next steps for collaboration."
 )
 ABOUT_CTA_MAP = "Explore the engagement map →"
-ABOUT_CTA_SITE = "Visit pim-pam.net"
+ABOUT_CTA_SITE = "Visit PIM-PAM Digital Tools"
 ABOUT_COL_LABELS = ("Measure", "Gap", "Action")
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -413,7 +413,7 @@ METHOD_SECTIONS = (
         ],
     },
     {
-        "h": "pim-pam.net: prototype, then adopt",
+        "h": "wkpgf-pimpam-digital-tools: prototype, then adopt",
         "p": [
             "PIM-PAM IT projects are notorious for delays and disappointment, and AI raises the stakes further. Open-source prototypes and model resources let counterparts see success in digitalization and AI firsthand — cutting the time, cost, and risk of building real systems. Bank-executed activities can't implement government systems directly, but prototypes and learning-by-doing pave a faster, surer path to recipient-led adoption.",
         ],
@@ -456,7 +456,7 @@ METHOD_PROGRESSION = (
         "row": "Objective",
         "cells": (
             ["Colleagues and counterparts appreciate the value of global solutions."],
-            [("a", "pim-pam.net", PIM_PAM_NET_URL), " and ", ("a", "pim-pam.ai", PIM_PAM_AI_URL),
+            [("a", "wkpgf-pimpam-digital-tools", PIM_PAM_NET_URL), " and ", ("a", "pim-pam.ai", PIM_PAM_AI_URL),
              " tools are applied to a specific country context."],
             ["Decision-support is mainstreamed as part of policies and practices, including digitalization and AI."],
         ),
@@ -572,7 +572,7 @@ RELEASE_NOTES = (
         "version": "v1.1.0", "category": "Improvement", "date": "June 2026",
         "title": "PIM-PAM branding",
         "items": (
-            "Applied the pim-pam.net brand across the site: logo, Fira Sans headings, Inter body text, and the official colour palette.",
+            "Applied the pim-pam brand across the site: logo, Fira Sans headings, Inter body text, and the official colour palette.",
         ),
     },
     {

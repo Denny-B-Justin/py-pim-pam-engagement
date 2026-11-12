@@ -56,7 +56,7 @@ def layout(params: dict[str, str]) -> Any:
             html.P(
                 [
                     P.RELEASE_INTRO_PRE,
-                    external_link("pim-pam.net", P.PIM_PAM_NET_URL, "font-semibold text-brand-blue underline"),
+                    external_link("wkpgf-pimpam-digital-tools", P.PIM_PAM_NET_URL, "font-semibold text-brand-blue underline"),
                     ".",
                 ],
                 className="mt-4 max-w-2xl text-base leading-relaxed text-gray-700",
