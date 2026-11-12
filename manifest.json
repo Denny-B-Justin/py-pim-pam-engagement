@@ -1,0 +1,209 @@
+{
+  "version": 1,
+  "locale": "en_US.UTF-8",
+  "metadata": {
+    "appmode": "python-dash",
+    "entrypoint": "app:app"
+  },
+  "python": {
+    "version": "3.11.9",
+    "package_manager": {
+      "name": "pip",
+      "version": "26.3",
+      "package_file": "requirements.txt"
+    }
+  },
+  "environment": {
+    "python": {
+      "requires": "~=3.11.0"
+    }
+  },
+  "files": {
+    "requirements.txt": {
+      "checksum": "0d11ffd91f25898a4953dc662ab292a7"
+    },
+    ".env.sample": {
+      "checksum": "98f80bf7ee26bec0684306354b599d9c"
+    },
+    ".gitignore": {
+      "checksum": "03b2788eac5f839803a221deb18a7b4a"
+    },
+    ".python-version": {
+      "checksum": "0f792473d190b807aef2a889a5804710"
+    },
+    "README.md": {
+      "checksum": "5f345abbae58d9c92e0bcc0d8bc12d4b"
+    },
+    "app.py": {
+      "checksum": "07c317ff83629fef0b9b591a3647af8b"
+    },
+    "assets/00-tailwind.css": {
+      "checksum": "43e03d84e0bebc4fd2cd60cfddec9751"
+    },
+    "assets/PIM-PAM_Country_Profile_Template.docx": {
+      "checksum": "4348c97f3239c35986fa96d60a9d8134"
+    },
+    "assets/admin.js": {
+      "checksum": "d690baeebf17e05eaf230e4d6208c27f"
+    },
+    "assets/countries.geojson": {
+      "checksum": "516164085426e6f9a84646395b02765a"
+    },
+    "assets/fonts/fira-sans-latin-400-normal.woff2": {
+      "checksum": "d26e1b11589f2c2744eadc0ac2ffae94"
+    },
+    "assets/fonts/fira-sans-latin-500-normal.woff2": {
+      "checksum": "9410bb8f89e52fc8df5f0aca7009947c"
+    },
+    "assets/fonts/fira-sans-latin-600-normal.woff2": {
+      "checksum": "beb3d7395726910999a3b89eb76e9a4b"
+    },
+    "assets/fonts/fira-sans-latin-700-normal.woff2": {
+      "checksum": "43eb5ca3942e0f74137d8754629fb9e6"
+    },
+    "assets/fonts/inter-latin-ext-wght-normal.woff2": {
+      "checksum": "1ad231aac0a8a891b8374aa5526a5813"
+    },
+    "assets/fonts/inter-latin-wght-normal.woff2": {
+      "checksum": "260c81a4759baf163c025001c4f27872"
+    },
+    "assets/icon.svg": {
+      "checksum": "4ebd42b48ae317fa2dc26e2206ba5c6c"
+    },
+    "assets/map.js": {
+      "checksum": "9b427e7672f058db0c1e528fbaf5a699"
+    },
+    "assets/menu.svg": {
+      "checksum": "ea30c0a4ce8d1c70a56b9f1fd0e8efc9"
+    },
+    "assets/pim-pam-logo.png": {
+      "checksum": "c6d7aab1c06f8084bc2910953c42784b"
+    },
+    "assets/site.js": {
+      "checksum": "89aae0a95df6f6cd09c189f270d55a5e"
+    },
+    "assets/style.css": {
+      "checksum": "ac23c39fb127516853c4457ef5bb01b1"
+    },
+    "assets/vendor/leaflet/LICENSE": {
+      "checksum": "609e72f97803246ff294511b99c8c89a"
+    },
+    "assets/vendor/leaflet/images/layers-2x.png": {
+      "checksum": "4f0283c6ce28e888000e978e537a6a56"
+    },
+    "assets/vendor/leaflet/images/layers.png": {
+      "checksum": "a6137456ed160d7606981aa57c559898"
+    },
+    "assets/vendor/leaflet/images/marker-icon-2x.png": {
+      "checksum": "401d815dc206b8dc1b17cd0e37695975"
+    },
+    "assets/vendor/leaflet/images/marker-icon.png": {
+      "checksum": "2273e3d8ad9264b7daa5bdbf8e6b47f8"
+    },
+    "assets/vendor/leaflet/images/marker-shadow.png": {
+      "checksum": "44a526eed258222515aa21eaffd14a96"
+    },
+    "assets/vendor/leaflet/leaflet.css": {
+      "checksum": "c02c12fe5e21d2493070649584ca38b7"
+    },
+    "assets/vendor/leaflet/leaflet.js": {
+      "checksum": "35b48eb991f383702f153452506e07b2"
+    },
+    "constants.py": {
+      "checksum": "92e94fd6c0cd3f0b7f35bfd759937adc"
+    },
+    "page_constants.py": {
+      "checksum": "6c54ec607ed9e4f6b46dac21881a84d2"
+    },
+    "pages/__init__.py": {
+      "checksum": "58536adf0b2d3f228bbc1f9c553038c2"
+    },
+    "pages/about.py": {
+      "checksum": "8feacb7664de4c3f7df01d2d3ab7c0ea"
+    },
+    "pages/admin_country.py": {
+      "checksum": "7006dba7a8b8afdb90d596e70878b5e3"
+    },
+    "pages/admin_dashboard.py": {
+      "checksum": "5a13a1429ca506c491882668bd911d43"
+    },
+    "pages/admin_home.py": {
+      "checksum": "48e9dd1b20cab6b202da35d6768cd2d0"
+    },
+    "pages/admin_review.py": {
+      "checksum": "e5a734169338a427cbc524bf31ea2648"
+    },
+    "pages/country_detail.py": {
+      "checksum": "03b5db80c78b31e873899a63ebad04d5"
+    },
+    "pages/country_index.py": {
+      "checksum": "8061fe94a5bf07f3c9b864df8c1ca513"
+    },
+    "pages/home.py": {
+      "checksum": "5439871ae9a9b88299a9136a4d40c499"
+    },
+    "pages/login.py": {
+      "checksum": "9b1d0279505a82e2766b3078538163d7"
+    },
+    "pages/map_page.py": {
+      "checksum": "c64d6484dba338bb5cd1884824e7c9ea"
+    },
+    "pages/methodology.py": {
+      "checksum": "1b9df7bd89d9c78bd0fa3cabb50cf0f0"
+    },
+    "pages/not_found.py": {
+      "checksum": "4c28b9b921af89295b566ea11fcbf1b5"
+    },
+    "pages/release_notes.py": {
+      "checksum": "d234fafce594ca3668cb27ffc402575c"
+    },
+    "services/__init__.py": {
+      "checksum": "99d277ad843ed8b998be43381914b5ff"
+    },
+    "services/auth.py": {
+      "checksum": "8b3f2cfa9d9f3b861888e79645d37aca"
+    },
+    "services/brief_docx.py": {
+      "checksum": "000a940b9ec40b870a3ed9409d434ea0"
+    },
+    "services/cache.py": {
+      "checksum": "ee586a6377b6b3f4d1f128a44615038a"
+    },
+    "services/db.py": {
+      "checksum": "150efeddf6d326ada8dce9d0782bf89b"
+    },
+    "services/exports.py": {
+      "checksum": "649943ec52a57eaacef8f97c1f9e7402"
+    },
+    "services/fallback_data.py": {
+      "checksum": "f105b092eb6235bb0017f4e5cd1f4e46"
+    },
+    "services/repository.py": {
+      "checksum": "c7f16ffce9b93a8e7d99c5fd69ca790d"
+    },
+    "services/validation.py": {
+      "checksum": "364c246fc92cfa54702418fae781c555"
+    },
+    "utils/__init__.py": {
+      "checksum": "29187101c84613f17793969d9eabea33"
+    },
+    "utils/components.py": {
+      "checksum": "126630d6f1c852f27ab33140e153cd92"
+    },
+    "utils/forms.py": {
+      "checksum": "7cab22d624d33d28c00c3b94ea101106"
+    },
+    "utils/layout.py": {
+      "checksum": "3cfc0f63f2fafe7e6e51719fd6d07367"
+    },
+    "utils/results.py": {
+      "checksum": "802471805c52be252f7aa2eb826aac50"
+    },
+    "utils/routing.py": {
+      "checksum": "d477479266d1f7cc960ab0328906f7be"
+    },
+    "utils/theme.py": {
+      "checksum": "61dbcbfe07490f480fccf895291d78ce"
+    }
+  }
+}

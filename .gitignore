@@ -1,0 +1,22 @@
+# secrets & local config
+.env
+.env.*
+!.env.sample
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# tailwind build tooling (only the compiled assets/00-tailwind.css is needed at runtime)
+design/node_modules/
+design/package-lock.json
+
+# editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.log

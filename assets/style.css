@@ -1,0 +1,232 @@
+/*
+ * style.css — hand-written styles for the PIM-PAM engagement site.
+ *
+ * Dash serves every file in assets/ alphabetically, so this loads AFTER 00-tailwind.css
+ * (the compiled Tailwind utilities; see design/). Here live the things Tailwind cannot
+ * express: self-hosted fonts, Leaflet label styles, and skins for the Dash components
+ * (dropdowns, checkboxes) that stand in for native <select> / <input type=checkbox>.
+ */
+
+/* ── Fonts (self-hosted; the original used next/font: Inter body, Fira Sans headings) ───────── */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/inter-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/inter-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/fira-sans-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/fira-sans-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/fira-sans-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/fira-sans-latin-700-normal.woff2") format("woff2");
+}
+
+:root {
+  --font-inter: "Inter";
+  --font-fira: "Fira Sans";
+}
+
+/* ── Base (app/globals.css) ──────────────────────────────────────────────────────────────────── */
+html,
+body {
+  height: 100%;
+}
+body {
+  background: #ffffff;
+  color: #1f2d3d;
+}
+
+/* ── Leaflet container + label styles (carried over from the standalone map) ──────────────────── */
+.leaflet-tooltip.country-tip {
+  background: rgba(31, 78, 121, 0.96);
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+  font-size: 11.5px;
+  padding: 4px 8px;
+}
+.leaflet-tooltip.country-tip::before {
+  display: none;
+}
+.leaflet-tooltip.country-name-label {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 12px;
+  color: #11202f;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0 -1.4px 0 #fff, 0 1.4px 0 #fff,
+    -1.4px 0 0 #fff, 1.4px 0 0 #fff;
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.leaflet-tooltip.country-name-label.on-dark {
+  color: #fff;
+  text-shadow: -1px -1px 0 #11202f, 1px -1px 0 #11202f, -1px 1px 0 #11202f, 1px 1px 0 #11202f, 0 -1.4px 0 #11202f,
+    0 1.4px 0 #11202f, -1.4px 0 0 #11202f, 1.4px 0 0 #11202f;
+}
+.leaflet-tooltip.country-name-label.small {
+  font-size: 10px;
+}
+.leaflet-tooltip.country-name-label::before {
+  display: none !important;
+}
+.wb-hint span {
+  display: inline-block;
+  background: rgba(31, 78, 121, 0.92);
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.25;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+}
+.wb-hint span small {
+  font-weight: 400;
+  font-size: 9.5px;
+  opacity: 0.85;
+}
+
+/* ── Checkbox (dcc.Checklist standing in for <input type=checkbox>) ───────────────────────────── */
+/* dcc.Checklist writes `display:block` inline on each label, hence !important. */
+.pp-checkbox {
+  display: inline-block;
+}
+.pp-checkbox-label {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #374151;
+  cursor: pointer;
+}
+.pp-checkbox-input {
+  margin: 0;
+  cursor: pointer;
+}
+/* the "Applied" checkbox of the country editor: 16px box, muted label */
+.pp-checkbox-lg .pp-checkbox-label {
+  color: #4b5563;
+}
+.pp-checkbox-lg .pp-checkbox-input {
+  height: 1rem;
+  width: 1rem;
+}
+
+/* ── Drop-down (dcc.Dropdown standing in for a native <select>) ────────────────────────────────
+ * Default size matches the compact inputs (px-2 py-1.5 → 34px); `.pp-select-lg` matches the
+ * roomy inputs of the country editor (px-3 py-2 → 38px). */
+.pp-select.Select {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.pp-select .Select-control {
+  height: 34px;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  background: #fff;
+  cursor: pointer;
+}
+.pp-select.Select.is-focused > .Select-control,
+.pp-select.Select.is-open > .Select-control {
+  border-color: #374291;
+  box-shadow: 0 0 0 1px #374291;
+}
+.pp-select .Select-value,
+.pp-select .Select-placeholder {
+  line-height: 32px;
+  padding-left: 0.5rem;
+  padding-right: 1.5rem;
+}
+/* react-select paints the selected value like a placeholder (#aaa) — use the normal text colour */
+.pp-select .Select-value,
+.pp-select .Select-value-label,
+.pp-select.Select.is-focused .Select-value-label {
+  color: #1f2d3d !important;
+}
+.pp-select .Select-input {
+  height: 32px;
+  padding-left: 0.5rem;
+}
+.pp-select .Select-arrow-zone {
+  padding-right: 8px;
+}
+.pp-select .Select-menu-outer {
+  z-index: 30;
+  margin-top: 2px;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+/* dcc.Dropdown renders its options through react-virtualized (fixed 35px rows) */
+.pp-select .VirtualizedSelectOption {
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  color: inherit;
+  cursor: pointer;
+}
+.pp-select .VirtualizedSelectFocusedOption {
+  background: #dee5f5;
+}
+.pp-select .VirtualizedSelectSelectedOption {
+  background: #eef1fa;
+  font-weight: 600;
+}
+.pp-select .VirtualizedSelectFocusedOption.VirtualizedSelectSelectedOption {
+  background: #dee5f5;
+}
+.pp-select-lg .Select-control {
+  height: 38px;
+}
+.pp-select-lg .Select-value,
+.pp-select-lg .Select-placeholder {
+  line-height: 36px;
+  padding-left: 0.75rem;
+}
+.pp-select-lg .Select-input {
+  height: 36px;
+  padding-left: 0.75rem;
+}

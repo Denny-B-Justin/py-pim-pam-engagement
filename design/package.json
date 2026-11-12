@@ -1,0 +1,12 @@
+{
+  "name": "pim-pam-dash-design",
+  "private": true,
+  "description": "Optional: rebuilds assets/00-tailwind.css after new Tailwind classes are used in the Python files.",
+  "scripts": {
+    "build": "tailwindcss -c tailwind.config.js -i input.css -o ../assets/00-tailwind.css --minify",
+    "watch": "tailwindcss -c tailwind.config.js -i input.css -o ../assets/00-tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}

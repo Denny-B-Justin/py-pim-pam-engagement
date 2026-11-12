@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Brand typography: Fira Sans for headings, Inter for body (per branding guidelines) */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-fira), "Fira Sans", system-ui, sans-serif;
+  }
+}
