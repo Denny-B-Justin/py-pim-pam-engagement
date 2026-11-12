@@ -230,3 +230,8 @@ body {
   height: 36px;
   padding-left: 0.75rem;
 }
+
+/* ── Dash marks empty `required` inputs with `outline: solid red`; the original site does not ── */
+input.dash-input:invalid {
+  outline: none;
+}

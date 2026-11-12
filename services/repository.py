@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import threading
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
@@ -42,8 +43,9 @@ from services.validation import (
 
 log = logging.getLogger(__name__)
 
-# Connections are per-thread, so a small *persistent* pool keeps them warm.
-_POOL = ThreadPoolExecutor(max_workers=6, thread_name_prefix="pp-db")
+# Runs independent queries side by side; each borrows a session from db's shared pool.
+_POOL_SIZE = 6
+_POOL = ThreadPoolExecutor(max_workers=_POOL_SIZE, thread_name_prefix="pp-db")
 
 # Stable insertion order for child rows (ids are strings, so ORDER BY id alone is not enough).
 _ID_ORDER = "`created_at` ASC NULLS LAST, LENGTH(`id`) ASC, `id` ASC"
@@ -102,6 +104,12 @@ def parse_day(value: Any) -> date | None:
         return None
 
 
+def warm_up() -> None:
+    """Fill the country-list cache, then open enough sessions for one fully parallel page load."""
+    fetch_countries()
+    db.warm_up(_POOL_SIZE - 1)
+
+
 def _parallel(*calls: Callable[[], Any]) -> list[Any]:
     """Run independent queries concurrently (the original used Promise.all). Errors propagate."""
     futures = [_POOL.submit(c) for c in calls]
@@ -140,6 +148,7 @@ class CountryList:
 
 
 FALLBACK_CACHE_SECONDS = 60
+_countries_lock = threading.Lock()  # one load at a time; concurrent callers reuse its result
 
 
 def _static_list() -> CountryList:
@@ -160,6 +169,12 @@ def fetch_countries() -> CountryList:
         return cached
     if not db.is_configured():
         return _static_list()
+    with _countries_lock:
+        cached = cache.get("countries")
+        return cached if cached is not None else _load_countries()
+
+
+def _load_countries() -> CountryList:
     try:
         rows = db.query(
             f"SELECT `iso3`, `name`, `region`, `status`, `focus_note`, `ttl` FROM {db.fq(C.TBL_COUNTRIES)} "

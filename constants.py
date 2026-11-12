@@ -76,7 +76,7 @@ TABLE_PREFIX = "pimpam_ai_engagement_"
 
 TBL_COUNTRIES = f"{TABLE_PREFIX}countries"            # one row per country engagement
 TBL_CONTACTS = f"{TABLE_PREFIX}country_contacts"      # World Bank focal points / staff
-TBL_COUNTERPARTS = f"{TABLE_PREFIX}counterparts"      # government / client counterparts
+TBL_COUNTERPARTS = f"{TABLE_PREFIX}pim_counterparts"  # government / client counterparts
 TBL_ASSESSMENTS = f"{TABLE_PREFIX}assessments"        # PEFA / PIMA / CCIA / InfraGov / GTMI
 TBL_PROJECTS = f"{TABLE_PREFIX}projects"              # operations & pipeline
 TBL_EVENTS = f"{TABLE_PREFIX}events"                  # missions, BBLs, training, …

@@ -4,8 +4,9 @@ db.py — thin Azure Databricks SQL layer (Unity Catalog).
 * Authenticates with OAuth machine-to-machine (service-principal client id +
   secret). If DATABRICKS_AZURE_TENANT_ID is set, the principal is treated as a
   Microsoft Entra ID service principal instead of a Databricks-managed one.
-* One connection per worker thread, created lazily and re-created if the
-  session has gone away.
+* A shared pool of open sessions: each statement borrows one and hands it back,
+  so a session outlives the (often short-lived) request thread that used it.
+  A session that has gone away is dropped and replaced.
 * Every statement uses *named parameters* (`:name`) — values are never
   interpolated into SQL text. Identifiers (catalog / schema / table / column)
   come only from constants.py and are validated before use.
@@ -62,7 +63,12 @@ def column(table: str, name: str) -> str:
 
 
 # ── connection handling ─────────────────────────────────────────────────────
+# Opening a session (OAuth token + Thrift session) takes seconds, so sessions are kept
+# in `_idle` between statements. `_local.conn` is the session the current thread has
+# borrowed for the statement it is running.
 _local = threading.local()
+_idle: list[Any] = []
+_idle_lock = threading.Lock()
 
 
 def _credentials_provider():
@@ -93,6 +99,15 @@ def _connect():
     )
 
 
+def _release() -> None:
+    """Return the session this thread borrowed to the shared pool."""
+    conn = getattr(_local, "conn", None)
+    _local.conn = None
+    if conn is not None:
+        with _idle_lock:
+            _idle.append(conn)
+
+
 def _drop_connection() -> None:
     conn = getattr(_local, "conn", None)
     _local.conn = None
@@ -112,7 +127,10 @@ def _cursor():
     for attempt in (1, 2):
         try:
             if getattr(_local, "conn", None) is None:
-                _local.conn = _connect()
+                with _idle_lock:
+                    _local.conn = _idle.pop() if _idle else None
+                if _local.conn is None:
+                    _local.conn = _connect()
             return _local.conn.cursor()
         except Exception as exc:  # noqa: BLE001
             _drop_connection()
@@ -158,6 +176,7 @@ def query(sql_text: str, params: Mapping[str, Any] | None = None) -> list[dict[s
                 cur.close()
             except Exception:  # noqa: BLE001
                 pass
+            _release()
     log.error("Query failed: %s", last)
     raise DatabaseError(_clean_message(last)) from last
 
@@ -205,6 +224,7 @@ def execute(sql_text: str, params: Mapping[str, Any] | None = None) -> int:
                 cur.close()
             except Exception:  # noqa: BLE001
                 pass
+            _release()
     log.error("Statement failed: %s", last)
     raise DatabaseError(_clean_message(last)) from last
 
@@ -230,6 +250,27 @@ def _clean_message(exc: Exception | None) -> str:
     """A short, user-presentable error (no stack traces, no secrets)."""
     text = str(exc or "Unknown database error").strip().splitlines()[0] if exc else "Unknown database error"
     return text[:300]
+
+
+def warm_up(sessions: int) -> None:
+    """Open `sessions` sessions in parallel and park them in the pool, so the first visitors do not wait."""
+    if not is_configured():
+        return
+
+    def open_one() -> None:
+        try:
+            conn = _connect()
+        except Exception as exc:  # noqa: BLE001 — a later statement will retry and report it
+            log.warning("Could not pre-open a Databricks session: %s", exc)
+            return
+        with _idle_lock:
+            _idle.append(conn)
+
+    threads = [threading.Thread(target=open_one, daemon=True) for _ in range(sessions)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
 
 
 def ping() -> bool:

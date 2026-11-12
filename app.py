@@ -65,8 +65,9 @@ _configure_session()
 app.layout = layout.shell
 pages.register_callbacks(app)
 
-# Warm the country-list cache in the background so the first visitor does not wait for the warehouse.
-threading.Thread(target=repo.fetch_countries, name="pp-warmup", daemon=True).start()
+# Warm the country-list cache and the Databricks sessions in the background so the first
+# visitors do not wait for the warehouse.
+threading.Thread(target=repo.warm_up, name="pp-warmup", daemon=True).start()
 
 
 # ── router ──────────────────────────────────────────────────────────────────
