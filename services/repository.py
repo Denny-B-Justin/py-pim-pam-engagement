@@ -182,11 +182,7 @@ def _load_countries() -> CountryList:
         )
     except db.DatabaseError:
         rows = []
-    # Skip malformed rows (e.g. fragments of a badly parsed CSV import) so one bad row cannot break the pages.
-    valid = [r for r in rows if re.fullmatch(r"[A-Z]{3}", r.get("iso3") or "") and r.get("name")]
-    if len(valid) < len(rows):
-        log.warning("Skipped %d malformed row(s) in %s", len(rows) - len(valid), C.TBL_COUNTRIES)
-    rows = valid
+    rows = _valid_country_rows(rows)
     if not rows:
         fallback = _static_list()
         cache.put("countries", fallback, FALLBACK_CACHE_SECONDS)
@@ -196,8 +192,8 @@ def _load_countries() -> CountryList:
             {
                 "iso3": r["iso3"],
                 "name": r["name"],
-                "region": r.get("region") or "",
-                "status": r.get("status") or "",
+                "region": r["region"],
+                "status": r["status"],
                 "focus": r.get("focus_note") or "",
                 "contact": r.get("ttl") or "—",
             }
@@ -209,17 +205,34 @@ def _load_countries() -> CountryList:
     return result
 
 
+def _valid_country_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """
+    Drop malformed country rows (e.g. fragments of a badly parsed CSV import: no
+    3-letter iso3, no name) so one bad row cannot break a page, and default a
+    missing region / status to "" so sorting and grouping still work.
+    """
+    valid = [r for r in rows if re.fullmatch(r"[A-Z]{3}", r.get("iso3") or "") and r.get("name")]
+    if len(valid) < len(rows):
+        log.warning("Skipped %d malformed row(s) in %s", len(rows) - len(valid), C.TBL_COUNTRIES)
+    for r in valid:
+        r["region"] = r.get("region") or ""
+        r["status"] = r.get("status") or ""
+    return valid
+
+
 def fetch_admin_rows() -> list[dict[str, Any]]:
     """Fresh country rows for the /admin list (iso3, name, region, status, focus_note, ttl)."""
-    return db.query(
-        f"SELECT `iso3`, `name`, `region`, `status`, `focus_note`, `ttl` FROM {db.fq(C.TBL_COUNTRIES)} "
-        "ORDER BY `region` ASC, `name` ASC"
+    return _valid_country_rows(
+        db.query(
+            f"SELECT `iso3`, `name`, `region`, `status`, `focus_note`, `ttl` FROM {db.fq(C.TBL_COUNTRIES)} "
+            "ORDER BY `region` ASC, `name` ASC"
+        )
     )
 
 
 def fetch_countries_full() -> list[dict[str, Any]]:
     """Every column of every country (review tracker, dashboard, exports)."""
-    return db.query(f"SELECT * FROM {db.fq(C.TBL_COUNTRIES)} ORDER BY `region` ASC, `name` ASC")
+    return _valid_country_rows(db.query(f"SELECT * FROM {db.fq(C.TBL_COUNTRIES)} ORDER BY `region` ASC, `name` ASC"))
 
 
 def fetch_wb_contacts() -> list[dict[str, Any]]:
