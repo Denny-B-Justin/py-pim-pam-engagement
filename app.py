@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import logging
 import os
+import threading
 from datetime import timedelta
 from typing import Any
 
@@ -24,6 +25,7 @@ import constants as C
 import page_constants as P
 import pages
 from services import auth
+from services import repository as repo
 from utils import layout
 from utils.routing import page_search, parse_search
 
@@ -62,6 +64,9 @@ def _configure_session() -> None:
 _configure_session()
 app.layout = layout.shell
 pages.register_callbacks(app)
+
+# Warm the country-list cache in the background so the first visitor does not wait for the warehouse.
+threading.Thread(target=repo.fetch_countries, name="pp-warmup", daemon=True).start()
 
 
 # ── router ──────────────────────────────────────────────────────────────────

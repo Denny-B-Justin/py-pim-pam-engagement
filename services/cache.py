@@ -33,11 +33,12 @@ class TTLCache:
                 del self._data[key]
         return None
 
-    def put(self, key: str, value: Any) -> None:
-        if self._ttl <= 0:
+    def put(self, key: str, value: Any, ttl_seconds: int | None = None) -> None:
+        ttl = self._ttl if ttl_seconds is None else min(ttl_seconds, self._ttl)
+        if ttl <= 0:
             return
         with self._lock:
-            self._data[key] = (time.monotonic() + self._ttl, value)
+            self._data[key] = (time.monotonic() + ttl, value)
 
     def get_or_load(self, key: str, loader: Callable[[], Any]) -> Any:
         """Return the cached value or call `loader()` (an exception is never cached)."""

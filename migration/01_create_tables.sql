@@ -2,7 +2,7 @@
 -- 01_create_tables.sql  -  Unity Catalog tables for the PIM-PAM engagement Dash app
 --
 -- Run this once in a Databricks SQL editor (or notebook) with a principal that may
--- CREATE TABLE in prd_mega.sgpbp163. The service principal the app uses afterwards needs only
+-- CREATE TABLE in prd_mega.sgpbpi163. The service principal the app uses afterwards needs only
 -- USE CATALOG, USE SCHEMA, SELECT and MODIFY on these tables (grants at the end of this file).
 --
 -- Generated from constants.py (COUNTRY_COLUMNS / CHILD_TABLE_COLUMNS). If you change the
@@ -19,7 +19,7 @@
 -- ============================================================================
 
 -- One row per country engagement (replaces Supabase public.countries). Source of truth for the map, country pages and admin editor.
-CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbp163`.`pimpam_countries` (
+CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbpi163`.`pimpam_countries` (
   `iso3` STRING NOT NULL COMMENT 'ISO 3166-1 alpha-3 code, upper case (primary key of the countries table)',
   `name` STRING,
   `region` STRING,
@@ -72,7 +72,7 @@ TBLPROPERTIES (
 );
 
 -- World Bank focal points / managers / staff - one row per person per country (Supabase country_contacts).
-CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbp163`.`pimpam_country_contacts` (
+CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbpi163`.`pimpam_country_contacts` (
   `id` STRING NOT NULL COMMENT 'STRING key: a UUID for rows created by the app; the old numeric id (as text) for migrated rows',
   `iso3` STRING COMMENT 'Country this row belongs to (logical FK to pimpam_countries.iso3)',
   `role` STRING,
@@ -91,7 +91,7 @@ TBLPROPERTIES (
 );
 
 -- Government / client PIM counterparts - also the e-mail update list (Supabase pim_counterparts).
-CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbp163`.`pimpam_counterparts` (
+CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbpi163`.`pimpam_counterparts` (
   `id` STRING NOT NULL COMMENT 'STRING key: a UUID for rows created by the app; the old numeric id (as text) for migrated rows',
   `iso3` STRING COMMENT 'Country this row belongs to (logical FK to pimpam_countries.iso3)',
   `level` STRING,
@@ -112,7 +112,7 @@ TBLPROPERTIES (
 );
 
 -- PEFA / PIMA / CCIA / InfraGov / GTMI assessments per country (Supabase assessments).
-CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbp163`.`pimpam_assessments` (
+CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbpi163`.`pimpam_assessments` (
   `id` STRING NOT NULL COMMENT 'STRING key: a UUID for rows created by the app; the old numeric id (as text) for migrated rows',
   `iso3` STRING COMMENT 'Country this row belongs to (logical FK to pimpam_countries.iso3)',
   `type` STRING,
@@ -131,7 +131,7 @@ TBLPROPERTIES (
 );
 
 -- Operations & pipeline per country (Supabase projects).
-CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbp163`.`pimpam_projects` (
+CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbpi163`.`pimpam_projects` (
   `id` STRING NOT NULL COMMENT 'STRING key: a UUID for rows created by the app; the old numeric id (as text) for migrated rows',
   `iso3` STRING COMMENT 'Country this row belongs to (logical FK to pimpam_countries.iso3)',
   `code` STRING,
@@ -153,7 +153,7 @@ TBLPROPERTIES (
 );
 
 -- Recent activity: missions, BBLs, trainings (Supabase events).
-CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbp163`.`pimpam_events` (
+CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbpi163`.`pimpam_events` (
   `id` STRING NOT NULL COMMENT 'STRING key: a UUID for rows created by the app; the old numeric id (as text) for migrated rows',
   `iso3` STRING COMMENT 'Country this row belongs to (logical FK to pimpam_countries.iso3)',
   `date` DATE,
@@ -172,7 +172,7 @@ TBLPROPERTIES (
 );
 
 -- Undo log: snapshot (JSON text) of every deleted child record, restorable from the country editor (Supabase deleted_records).
-CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbp163`.`pimpam_deleted_records` (
+CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbpi163`.`pimpam_deleted_records` (
   `id` STRING NOT NULL COMMENT 'STRING key: a UUID for rows created by the app; the old numeric id (as text) for migrated rows',
   `table_name` STRING COMMENT 'Unity Catalog name of the table the row was deleted from (e.g. pimpam_events)',
   `iso3` STRING COMMENT 'Country this row belongs to (logical FK to pimpam_countries.iso3)',
@@ -188,7 +188,7 @@ TBLPROPERTIES (
 );
 
 -- LEGACY archive of the retired ePIM-CBA projects table. Not read by the app.
-CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbp163`.`pimpam_epim_cba_projects` (
+CREATE TABLE IF NOT EXISTS `prd_mega`.`sgpbpi163`.`pimpam_epim_cba_projects` (
   `id` STRING NOT NULL COMMENT 'STRING key: a UUID for rows created by the app; the old numeric id (as text) for migrated rows',
   `iso3` STRING COMMENT 'Country this row belongs to (logical FK to pimpam_countries.iso3)',
   `sector` STRING,
@@ -207,10 +207,10 @@ TBLPROPERTIES (
 
 -- Optional: enforce the four engagement statuses at write time. Uncomment after the data is
 -- loaded and checked - a CHECK constraint rejects any write that violates it.
--- ALTER TABLE `prd_mega`.`sgpbp163`.`pimpam_countries` ADD CONSTRAINT `pimpam_status_valid`
+-- ALTER TABLE `prd_mega`.`sgpbpi163`.`pimpam_countries` ADD CONSTRAINT `pimpam_status_valid`
 --   CHECK (`status` IN ('Inception', 'Awareness', 'Application', 'Adoption'));
 
 -- Grants for the app's service principal (replace <client-id> with the principal's application ID):
 -- GRANT USE CATALOG ON CATALOG `prd_mega` TO `<client-id>`;
--- GRANT USE SCHEMA  ON SCHEMA  `prd_mega`.`sgpbp163` TO `<client-id>`;
--- GRANT SELECT, MODIFY ON SCHEMA `prd_mega`.`sgpbp163` TO `<client-id>`;
+-- GRANT USE SCHEMA  ON SCHEMA  `prd_mega`.`sgpbpi163` TO `<client-id>`;
+-- GRANT SELECT, MODIFY ON SCHEMA `prd_mega`.`sgpbpi163` TO `<client-id>`;

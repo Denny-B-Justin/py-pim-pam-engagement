@@ -67,7 +67,7 @@ DATABRICKS_AZURE_TENANT_ID = _env("DATABRICKS_AZURE_TENANT_ID")
 # 2. Unity Catalog location  (catalog.schema.table)
 # ─────────────────────────────────────────────────────────────────────────────
 CATALOG = _env("DATABRICKS_CATALOG", "prd_mega")
-SCHEMA = _env("DATABRICKS_SCHEMA", "sgpbp163")
+SCHEMA = _env("DATABRICKS_SCHEMA", "sgpbpi163")
 
 # Ideal Unity Catalog table names. Create the tables with these exact names
 # (migration/01_create_tables.sql does it for you) and load the Supabase CSV

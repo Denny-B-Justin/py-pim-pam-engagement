@@ -17,6 +17,7 @@ Notes
 from __future__ import annotations
 
 import json
+import logging
 import re
 import uuid
 from concurrent.futures import ThreadPoolExecutor
@@ -38,6 +39,8 @@ from services.validation import (
     has_valid_email,
     same_contact_name,
 )
+
+log = logging.getLogger(__name__)
 
 # Connections are per-thread, so a small *persistent* pool keeps them warm.
 _POOL = ThreadPoolExecutor(max_workers=6, thread_name_prefix="pp-db")
@@ -136,6 +139,9 @@ class CountryList:
     source: str  # "db" | "static"
 
 
+FALLBACK_CACHE_SECONDS = 60
+
+
 def _static_list() -> CountryList:
     return CountryList([dict(c) for c in FALLBACK_COUNTRIES], "static")
 
@@ -146,7 +152,8 @@ def fetch_countries() -> CountryList:
 
     Cached for CACHE_TTL_SECONDS (the original's ISR window). Falls back to the
     bundled snapshot when the database is unreachable or empty — a fallback is
-    never cached, so the site recovers as soon as the database does.
+    cached only for FALLBACK_CACHE_SECONDS, so a failing query (which can take
+    30 s+) is not repeated on every page view, yet the site soon recovers.
     """
     cached = cache.get("countries")
     if cached is not None:
@@ -159,16 +166,23 @@ def fetch_countries() -> CountryList:
             "ORDER BY `region` ASC, `name` ASC"
         )
     except db.DatabaseError:
-        return _static_list()
+        rows = []
+    # Skip malformed rows (e.g. fragments of a badly parsed CSV import) so one bad row cannot break the pages.
+    valid = [r for r in rows if re.fullmatch(r"[A-Z]{3}", r.get("iso3") or "") and r.get("name")]
+    if len(valid) < len(rows):
+        log.warning("Skipped %d malformed row(s) in %s", len(rows) - len(valid), C.TBL_COUNTRIES)
+    rows = valid
     if not rows:
-        return _static_list()
+        fallback = _static_list()
+        cache.put("countries", fallback, FALLBACK_CACHE_SECONDS)
+        return fallback
     result = CountryList(
         [
             {
                 "iso3": r["iso3"],
                 "name": r["name"],
-                "region": r["region"],
-                "status": r["status"],
+                "region": r.get("region") or "",
+                "status": r.get("status") or "",
                 "focus": r.get("focus_note") or "",
                 "contact": r.get("ttl") or "—",
             }

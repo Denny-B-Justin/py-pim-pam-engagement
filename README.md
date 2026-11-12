@@ -38,7 +38,7 @@ the country list; the staff pages (editing, review, dashboard) need the database
 
 All settings are environment variables — see [`.env.sample`](.env.sample) for the full, commented
 list. They are read in one place, `constants.py`, together with the catalog / schema / table names
-(`prd_mega` · `sgpbp163` · `pimpam_*`). **No secret is stored in the code.** Locally they come from
+(`prd_mega` · `sgpbpi163` · `pimpam_*`). **No secret is stored in the code.** Locally they come from
 `.env` (git-ignored); on Posit Connect from the content's **Vars** pane.
 
 | Variable | Purpose |
@@ -46,7 +46,7 @@ list. They are read in one place, `constants.py`, together with the catalog / sc
 | `DATABRICKS_SERVER_HOSTNAME`, `DATABRICKS_HTTP_PATH` | SQL warehouse connection details |
 | `DATABRICKS_CLIENT_ID`, `DATABRICKS_CLIENT_SECRET` | service principal (OAuth machine-to-machine) |
 | `DATABRICKS_AZURE_TENANT_ID` | only for an Azure Entra ID application secret |
-| `DATABRICKS_CATALOG`, `DATABRICKS_SCHEMA` | default `prd_mega` / `sgpbp163` |
+| `DATABRICKS_CATALOG`, `DATABRICKS_SCHEMA` | default `prd_mega` / `sgpbpi163` |
 | `APP_PASSWORD` | shared staff password |
 | `APP_COOKIE_SECRET` | signs the session cookie (≥ 32 random characters) |
 | `SESSION_COOKIE_SECURE` | `true` when served over HTTPS (Connect) |

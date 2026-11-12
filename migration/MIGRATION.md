@@ -1,14 +1,13 @@
-# Moving the data: Supabase → Unity Catalog (`prd_mega.sgpbp163`)
+# Moving the data: Supabase → Unity Catalog (`prd_mega.sgpbpi163`)
 
 This guide takes the data from the old Next.js app's Supabase project into the Azure Databricks
 Unity Catalog tables that the Dash app reads and writes. The data set is small (about 40 countries
 and a few hundred child records), so a CSV / Excel export plus the loader script in this folder is
 all that is needed.
 
-> **Schema name.** The request text said `prd_mega.sgpbp163`; the generic instructions said
-> `prd_mega.sgpbpi163`. The app defaults to **`sgpbp163`**. If yours is the other one, set
-> `DATABRICKS_SCHEMA=sgpbpi163` in `.env` / the Connect Vars pane **and** change the schema in
-> `01_create_tables.sql` (or run it with the right schema selected). Nothing else needs to change.
+> **Schema name.** The tables live in **`prd_mega.sgpbpi163`** (note the `i`), which is the app's
+> default. To use another schema, set `DATABRICKS_SCHEMA` in `.env` / the Connect Vars pane **and**
+> change the schema in `01_create_tables.sql`. Nothing else needs to change.
 
 ## 1. Is any of this NoSQL?
 
@@ -36,7 +35,7 @@ The Google Sheet mentioned in the old repo (`1F7mMr238p1ZVR0VL2Rhk9zVXonqnzvI0K3
 
 ## 2. Table names (what to call them in Unity Catalog)
 
-All tables live in `prd_mega.sgpbp163` and carry the `pimpam_` prefix so they cannot collide with
+All tables live in `prd_mega.sgpbpi163` and carry the `pimpam_` prefix so they cannot collide with
 anything else in the schema. The names are defined once, in `constants.py`
 (`TBL_*` and `SUPABASE_TO_UC_TABLES`); the DDL is generated from the same definitions.
 
@@ -115,26 +114,26 @@ is a reserved word). Only the table names and the types below differ.
 
 ```sql
 -- row counts (compare with the Supabase table editor)
-SELECT 'countries' AS t, COUNT(*) AS n FROM prd_mega.sgpbp163.pimpam_countries
-UNION ALL SELECT 'country_contacts', COUNT(*) FROM prd_mega.sgpbp163.pimpam_country_contacts
-UNION ALL SELECT 'counterparts',     COUNT(*) FROM prd_mega.sgpbp163.pimpam_counterparts
-UNION ALL SELECT 'assessments',      COUNT(*) FROM prd_mega.sgpbp163.pimpam_assessments
-UNION ALL SELECT 'projects',         COUNT(*) FROM prd_mega.sgpbp163.pimpam_projects
-UNION ALL SELECT 'events',           COUNT(*) FROM prd_mega.sgpbp163.pimpam_events
-UNION ALL SELECT 'deleted_records',  COUNT(*) FROM prd_mega.sgpbp163.pimpam_deleted_records;
+SELECT 'countries' AS t, COUNT(*) AS n FROM prd_mega.sgpbpi163.pimpam_countries
+UNION ALL SELECT 'country_contacts', COUNT(*) FROM prd_mega.sgpbpi163.pimpam_country_contacts
+UNION ALL SELECT 'counterparts',     COUNT(*) FROM prd_mega.sgpbpi163.pimpam_counterparts
+UNION ALL SELECT 'assessments',      COUNT(*) FROM prd_mega.sgpbpi163.pimpam_assessments
+UNION ALL SELECT 'projects',         COUNT(*) FROM prd_mega.sgpbpi163.pimpam_projects
+UNION ALL SELECT 'events',           COUNT(*) FROM prd_mega.sgpbpi163.pimpam_events
+UNION ALL SELECT 'deleted_records',  COUNT(*) FROM prd_mega.sgpbpi163.pimpam_deleted_records;
 
 -- the four engagement statuses (anything else will not colour correctly on the map)
-SELECT status, COUNT(*) FROM prd_mega.sgpbp163.pimpam_countries GROUP BY status ORDER BY 2 DESC;
+SELECT status, COUNT(*) FROM prd_mega.sgpbpi163.pimpam_countries GROUP BY status ORDER BY 2 DESC;
 
 -- child rows whose country does not exist (should return 0 rows)
-SELECT 'country_contacts' AS t, c.iso3 FROM prd_mega.sgpbp163.pimpam_country_contacts c
-  LEFT ANTI JOIN prd_mega.sgpbp163.pimpam_countries k ON k.iso3 = c.iso3
-UNION ALL SELECT 'events', e.iso3 FROM prd_mega.sgpbp163.pimpam_events e
-  LEFT ANTI JOIN prd_mega.sgpbp163.pimpam_countries k ON k.iso3 = e.iso3;
+SELECT 'country_contacts' AS t, c.iso3 FROM prd_mega.sgpbpi163.pimpam_country_contacts c
+  LEFT ANTI JOIN prd_mega.sgpbpi163.pimpam_countries k ON k.iso3 = c.iso3
+UNION ALL SELECT 'events', e.iso3 FROM prd_mega.sgpbpi163.pimpam_events e
+  LEFT ANTI JOIN prd_mega.sgpbpi163.pimpam_countries k ON k.iso3 = e.iso3;
 
 -- undo log: only Unity Catalog table names, and every payload is JSON (both should be clean)
-SELECT table_name, COUNT(*) FROM prd_mega.sgpbp163.pimpam_deleted_records GROUP BY table_name;
-SELECT id FROM prd_mega.sgpbp163.pimpam_deleted_records WHERE get_json_object(payload, '$.iso3') IS NULL;
+SELECT table_name, COUNT(*) FROM prd_mega.sgpbpi163.pimpam_deleted_records GROUP BY table_name;
+SELECT id FROM prd_mega.sgpbpi163.pimpam_deleted_records WHERE get_json_object(payload, '$.iso3') IS NULL;
 ```
 
 ## 7. Doing it without the script (optional)
