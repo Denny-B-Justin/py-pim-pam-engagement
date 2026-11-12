@@ -72,7 +72,7 @@ SCHEMA = _env("DATABRICKS_SCHEMA", "sgpbpi163")
 # Ideal Unity Catalog table names. Create the tables with these exact names
 # (migration/01_create_tables.sql does it for you) and load the Supabase CSV
 # exports into them (see migration/MIGRATION.md).
-TABLE_PREFIX = "pimpam_ai_engagement_"
+TABLE_PREFIX = "pimpam_ai_engagement_prod_"
 
 TBL_COUNTRIES = f"{TABLE_PREFIX}countries"            # one row per country engagement
 TBL_CONTACTS = f"{TABLE_PREFIX}country_contacts"      # World Bank focal points / staff
